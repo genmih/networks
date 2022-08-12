@@ -10,16 +10,18 @@ def to_bytes(line):
 
 def send_show_command(ip, username, password, enable, command):
     with telnetlib.Telnet(ip) as telnet:
-        telnet.read_until(b"Username")
+        telnet.read_until(b"Username:")
         telnet.write(to_bytes(username))
-        telnet.read_until(b"Password")
+        telnet.read_until(b"Password:")
         telnet.write(to_bytes(password))
+        '''
         index, m, output = telnet.expect([b">", b"#"])
         if index == 0:
             telnet.write(b"enable\n")
             telnet.read_until(b"Password")
             telnet.write(to_bytes(enable))
-            telnet.read_until(b"#", timeout=5)
+        '''    
+        telnet.read_until(b">", timeout=5)
         time.sleep(3)
         telnet.read_very_eager()
 
@@ -41,7 +43,7 @@ def send_show_command(ip, username, password, enable, command):
 
 
 if __name__ == "__main__":
-    devices = ["192.168.100.1", "192.168.100.2", "192.168.100.3"]
+    devices = ["10.1.0.1", "10.1.0.2", "10.1.0.3"]
     for ip in devices:
-        result = send_show_command(ip, "cisco", "cisco", "cisco", "sh run")
+        result = send_show_command(ip, "root", "huawei", "huawei", "disp mac-ad")
         pprint(result, width=120)
