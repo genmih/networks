@@ -20,7 +20,7 @@ def send_show_command(ip, username, password, enable, command):
             telnet.write(b"enable\n")
             telnet.read_until(b"Password")
             telnet.write(to_bytes(enable))
-        '''    
+        '''          
         telnet.read_until(b">", timeout=5)
         time.sleep(3)
         telnet.read_very_eager()
@@ -29,7 +29,8 @@ def send_show_command(ip, username, password, enable, command):
         result = ""
 
         while True:
-            index, match, output = telnet.expect([b"--More--", b"#"], timeout=5)
+            index, match, output = \
+                telnet.expect([b"--More--", b"#"], timeout=5)
             output = output.decode("utf-8")
             output = re.sub(" +--More--| +\x08+ +\x08+", "\n", output)
             result += output
@@ -45,5 +46,6 @@ def send_show_command(ip, username, password, enable, command):
 if __name__ == "__main__":
     devices = ["10.1.0.1", "10.1.0.2", "10.1.0.3"]
     for ip in devices:
-        result = send_show_command(ip, "root", "huawei", "huawei", "disp mac-ad")
+        result = \
+            send_show_command(ip, "root", "huawei", "huawei", "disp mac-ad")
         pprint(result, width=120)

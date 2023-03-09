@@ -27,7 +27,8 @@ def send_show_command(ip, username, password, enable, command):
         result = ""
 
         while True:
-            index, match, output = telnet.expect([b"--More--", b"#"], timeout=5)
+            index, match, output = \
+                telnet.expect([b"--More--", b"#"], timeout=5)
             output = output.decode("utf-8")
             output = re.sub(" +--More--| +\x08+ +\x08+", "\n", output)
             result += output
