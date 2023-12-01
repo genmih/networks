@@ -8,7 +8,7 @@ def to_bytes(line):
     return f"{line}\n".encode("utf-8")
 
 
-def send_show_command(ip, username, password, enable, command):
+def send_show_command(ip, username, password,  command):
     with telnetlib.Telnet(ip) as telnet:
         telnet.read_until(b"Username:")
         telnet.write(to_bytes(username))
@@ -45,7 +45,7 @@ def send_show_command(ip, username, password, enable, command):
 
 if __name__ == "__main__":
     devices = ["10.1.0.1", "10.1.0.2", "10.1.0.3"]
-    for ip in devices:
-        result = \
-            send_show_command(ip, "root", "huawei", "huawei", "disp mac-ad")
-        pprint(result, width=120)
+    for ipv4 in devices:
+        answer = \
+            send_show_command(ipv4, "root", "huawei", "disp mac-ad")
+        pprint(answer, width=120)
