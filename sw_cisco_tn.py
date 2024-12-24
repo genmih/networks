@@ -24,25 +24,25 @@ def send_show_command(ip, username, password, enable, command):
         telnet.read_very_eager()
 
         telnet.write(to_bytes(command))
-        result = ""
+        inner_result = ""
 
         while True:
             index, match, output = \
                 telnet.expect([b"--More--", b"#"], timeout=5)
             output = output.decode("utf-8")
             output = re.sub(" +--More--| +\x08+ +\x08+", "\n", output)
-            result += output
+            inner_result += output
             if index in (1, -1):
                 break
             telnet.write(b" ")
             time.sleep(1)
-            result.replace("\r\n", "\n")
+            inner_result.replace("\r\n", "\n")
 
-        return result
+        return inner_result
 
 
 if __name__ == "__main__":
     devices = ["192.168.100.1", "192.168.100.2", "192.168.100.3"]
-    for ip in devices:
-        result = send_show_command(ip, "cisco", "cisco", "cisco", "sh run")
+    for ip_a in devices:
+        result = send_show_command(ip_a, "cisco", "cisco", "cisco", "sh run")
         pprint(result, width=120)
